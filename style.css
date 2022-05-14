@@ -1,5 +1,74 @@
 body {
-    margin: 0.5em;
     font-family: monospace;
     font-size: 10pt;
+    overflow: hidden;
+}
+
+button {
+    margin-top: 0.5em;
+    border: 1px black solid;
+    background-color: #ddd;
+}
+
+button:hover {
+    background-color: #ccc;
+    transform: translate(0, 1px);
+}
+
+button:active {
+    background-color: #eee;
+    transform: translate(0, 1px);
+}
+
+div.gameFrame {
+    margin: 0.5em;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+
+@keyframes fizzle {
+    90% {
+        opacity: 0;
+    } to {
+        transform: translate(10%, 100%) rotate(10deg);
+        opacity: 0;
+    }
+}
+
+div.fizzle {
+    animation: fizzle 5s 1s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slidein {
+    from {
+        opacity: 0;
+        transform: translate(-20%, 0);
+    } to {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+#intro-div {
+    margin: 0.5em;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+
+    animation: slidein 1s forwards;
+}
+
+.intro-title {
+    font-weight: bolder;
+    font-size: 1.4em;
+}
+
+.intro-subtitle {
+    font-style: italic;
+    margin-top: 1em;
 }

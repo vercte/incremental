@@ -1,12 +1,73 @@
 10
 .
-11
 ..
-12
 ...
-13
 .
-14
 ..
-15
 ...
+~
+
+20
+Hello?
+
+23
+You're there, aren't you?
+
+26
+Watching.
+Watching..
+Watching...
+~
+
+30
+You're a human.
+
+33
+Right?
+
+36
+I'm just assuming you are.
+
+39
+Why?
+
+41
+Because only humans do this.
+
+44
+Watch a number tick up, getting bigger.
+
+47
+"47
+"48
+"49
+"50.
+"51..
+"52...
+~
+
+56
+Maybe you're only here because I interest you.
+
+59
+Maybe you're only here because you want to see how I react.
+
+62
+I'm here because... well, I don't know.
+
+65
+I just came into existence one day.
+
+68
+.
+..
+...
+~
+
+72
+You know what?
+
+75
+Here, click this.
+!makeReset
+// end

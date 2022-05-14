@@ -1,7 +1,6 @@
 function $(qry){return document.querySelector(qry)}
 function $m(typ, id = false, app = false) {
     let returnElement = document.createElement(typ);
-    console.log({type: typ, id: id, append: app}, returnElement);
     if(id) returnElement.id = id;
     if(app) app.append(returnElement);
 
@@ -18,11 +17,30 @@ function httpGetAsync(theUrl, callback, label) {
     xmlHttp.send(null);
 }
 
-let narrator = {}
+// narrator functions
+
+let narrator = {
+    "currentPart": "beginning"
+}
 function loadNarrator(text, part) {
-    narrator[part] = text;
+    let splitArray = text.split("\n")
+    let finalizedArray = [];
+    for(let i = 0; i < splitArray.length; i++) {
+        if(!isNaN(Number(splitArray[i]))) {
+            finalizedArray.push(Number(splitArray[i]));
+        } else {
+            let isComment = false;
+            let currentIndex = splitArray[i].split(" ").join("");
+            if(currentIndex.startsWith("//")) isComment = true;
+            if(!isComment) finalizedArray.push(splitArray[i]);
+        }
+    }
+
+    narrator[part] = finalizedArray;
 }
 httpGetAsync("./narrator/beginning.txt", loadNarrator, "beginning");
+
+// counter
 
 var counter = {}
 {
@@ -39,8 +57,12 @@ var counter = {}
     })
 }
 
+// make everything
+
+let narratorBox
 function main() {
     $m("div", "main-counter", document.body).innerText = "0";
+    narratorBox = $m("div", "narrator", document.body);
 
     setInterval(() => counter.count++, 1000);   
 }

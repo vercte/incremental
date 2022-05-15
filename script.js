@@ -6,6 +6,9 @@ function $m(typ, id = false, app = false) {
 
     return returnElement;
 }
+function $a(em, to=document.body) {
+    to.append(em);
+}
 
 function httpGetAsync(theUrl, callback, label) {
     var xmlHttp = new XMLHttpRequest();
@@ -13,7 +16,7 @@ function httpGetAsync(theUrl, callback, label) {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText, label);
     }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.open("GET", theUrl, true);
     xmlHttp.send(null);
 }
 
@@ -41,11 +44,11 @@ function loadNarrator(text, part) {
             if(!isComment) finalizedArray.push(currentLine);
         }
     }
-    console.log(finalizedArray)
-
     narrator[part] = finalizedArray;
 }
 httpGetAsync("./narrator/beginning.txt", loadNarrator, "beginning");
+httpGetAsync("./narrator/recursion.txt", loadNarrator, "recursion");
+httpGetAsync("./narrator/recursion2.txt", loadNarrator, "recursion2");
 
 let storyFunctions = {
     "makeReset": function(){
@@ -67,10 +70,38 @@ let storyFunctions = {
                 }, 1000);
             }, 500);
         })
+    },
+    "getName": function() {
+        clearInterval(interval);
+        let rd = $("#recursion-div");
+        $m("br", false, rd);
+        $m("input", "name-input", rd).type = "text";
+        $a(" ", rd);
+        $m("button", "name-submit", rd).innerText = "is my name.";
+        $("#name-submit").setAttribute("disabled", true);
+
+        $("#name-input").addEventListener("input", () => {
+            if(!($("#name-input").value.split(" ").join("") == "")) {
+                $("#name-submit").removeAttribute("disabled", true);
+            } else {
+                $("#name-submit").setAttribute("disabled", true);
+            }
+        })
+
+        $("#name-submit").addEventListener("click", () => {
+            if($("#name-submit").getAttribute("disabled")) return;
+            narrator.playerName = $("#name-input").value;
+            $("#name-submit").remove(); $("#name-input").remove();
+            loadPart("recursion2");
+        })
     }
 }
 
 let currentPartIndex = 0;
+function replaceName(str) {
+    return str.replace(/\$(.*?[^\S]*\$)/g, narrator.playerName);
+}
+
 function speakPart(part) {
     let partSpeaking = narrator[part];
     if(typeof partSpeaking[currentPartIndex] == "number") {
@@ -82,7 +113,6 @@ function speakPart(part) {
             narratorBox.innerText = "";
         } else if(partSpeaking[currentPartIndex].startsWith("__func")) {
             let callback = partSpeaking[currentPartIndex].substring(7);
-            console.log(partSpeaking[currentPartIndex]);
             if(storyFunctions[callback]) storyFunctions[callback]();
             currentPartIndex++;
             return;
@@ -92,16 +122,24 @@ function speakPart(part) {
             narratorBox.innerText = partSpeaking[currentPartIndex];
             currentPartIndex++;
             return;
+        } else if(partSpeaking[currentPartIndex].match(/\$(.*?[^\S]*\$)/g)) {
+            narratorBox.innerText = replaceName(partSpeaking[currentPartIndex]);
         } else narratorBox.innerText = partSpeaking[currentPartIndex];
         currentPartIndex++;
     }
 }
 
-function __jumpTo(count, index) {
+let debug = {}
+debug.jumpTo = function(count, index) {
     counter.count = count;
     currentPartIndex = index;
     if(currentPartIndex > narrator[narrator.currentPart].length) currentPartIndex = narrator[narrator.currentPart].length
     tick(); 
+}
+
+debug.enableStep = function() {
+    $m("button", "debug-step", document.body).innerText = "Debug: STEP";
+    $("#debug-step").addEventListener("click", tick);
 }
 
 // counter
@@ -124,6 +162,7 @@ var counter = {}
 // make everything
 
 function tick() {
+    if(document.visibilityState == "hidden") return;
     counter.count++;
     speakPart(narrator.currentPart);
 }
@@ -131,8 +170,10 @@ function tick() {
 let narratorBox
 let interval = 0;
 function loadPart(part) {
+    currentPartIndex = 0;
     switch(part) {
         case "recursion":
+            narrator.currentPart = "recursion";
             let introDiv = $m("div", "intro-div", document.body);
             let title = $m("div", false, introDiv);
             title.className = "intro-title";
@@ -141,7 +182,22 @@ function loadPart(part) {
             let subtitle = $m("div", false, introDiv);
             subtitle.className = "intro-subtitle";
             subtitle.innerText = "Recursion";
+            introDiv.addEventListener("animationend", ({animationName: an}) => {
+                if(an == "slideout") {
+                    introDiv.remove();
+                    let recursionDiv = $m("div", "recursion-div", document.body);
+                    $m("div", "main-counter", recursionDiv).innerText = "0";
+                    $m("br", false, recursionDiv);
+                    counter.count = 0;
+                    narratorBox = $m("div", "narrator", recursionDiv);
+
+                    interval = setInterval(tick, 1000);  
+                }
+            })
             break;
+        case "recursion2":
+            narrator.currentPart = "recursion2";
+            interval = setInterval(tick, 1000);  
     }
 }
 

@@ -5,6 +5,8 @@ body {
 }
 
 button {
+    font-family: monospace;
+    height: 1.5em;
     margin-top: 0.5em;
     border: 1px black solid;
     background-color: #ddd;
@@ -17,6 +19,27 @@ button:hover {
 
 button:active {
     background-color: #eee;
+    transform: translate(0, 1px);
+}
+
+button:disabled {
+    opacity: 0.7;
+    background-color: white;
+}
+
+input[type="text"] {
+    height: 1.5em;
+    font-family: monospace;
+    border: 1px solid black;
+    background-color: white;
+}
+
+input[type="text"]:hover {
+    transform: translate(0, 1px);
+}
+
+input[type="text"]:focus-visible {
+    outline: 1px lightgray;
     transform: translate(0, 1px);
 }
 
@@ -46,9 +69,23 @@ div.fizzle {
     from {
         opacity: 0;
         transform: translate(-20%, 0);
+    } 50% {
+        opacity: 0;
     } to {
         opacity: 1;
         transform: translate(0, 0);
+    }
+}
+
+@keyframes slideout {
+    from {
+        opacity: 1;
+        transform: translate(0, 0);
+    } 50% {
+        opacity: 0;
+    } to {
+        opacity: 0;
+        transform: translate(-20%, 0);
     }
 }
 
@@ -60,7 +97,7 @@ div.fizzle {
     bottom: 0;
     right: 0;
 
-    animation: slidein 1s forwards;
+    animation: slidein 1s forwards, slideout 1s 3s forwards;
 }
 
 .intro-title {
@@ -71,4 +108,21 @@ div.fizzle {
 .intro-subtitle {
     font-style: italic;
     margin-top: 1em;
+}
+
+#recursion-div {
+    animation: slidein 1s forwards;
+    margin: 0.5em;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+
+button#debug-step {
+    z-index: 10;
+    position: fixed;
+    left: 1em;
+    bottom: 1em;
 }

@@ -70,4 +70,19 @@ You know what?
 75
 Here, click this.
 !makeReset
+
+78
+Bet you won't.
+
+81
+C'mon! Click that button!
+
+84
+Please?
+
+87
+Nevermind.
+
+90
+You can click it if you want, though...
 // end

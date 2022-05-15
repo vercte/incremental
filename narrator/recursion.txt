@@ -1,0 +1,36 @@
+10
+.
+..
+...
+.
+..
+...
+~
+
+13
+AHH!
+
+15
+.
+..
+...
+Wait...
+
+22
+You again?
+
+25
+*sigh*
+
+28
+Sorry about that.
+
+31
+Nobody really ever clicks that button. They just... keep watching.
+
+34
+Say, I never got your name.
+
+37
+What's your name?
+!getName
